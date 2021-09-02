@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <title>test toast message</title>
+</head>
+<body>
+    <div class="contain">
+        <button onclick="showtoastSuccess();" class="contain__btn contain__btn--success">test toast success</button>
+        <button onclick="showtoastError();" class="contain__btn contain__btn--error">test toast error</button>
+    </div>
+    
+    <div id="toast">
+    </div>
+    
+    <script>
+        function toast({title='', message='', type='', duration=3000}) {
+            const main = document.getElementById('toast');
+
+            if (main){
+                const toast = document.createElement('div');
+
+                const RemoveID = setTimeout(function() {
+                    main.removeChild(toast);
+                }, duration + 500);
+    
+                toast.onclick = function(e) {
+                    if (e.target.closest('.close')) {
+                        main.removeChild(toast);
+                        clearTimeout(RemoveID);
+                    }
+                }
+
+                const icons = {
+                    success: 'fa fa-check-circle',
+                    error: 'fa fa-times-circle'
+                };
+                const icon = icons[type];
+                const delay = (duration / 1000).toFixed(2);
+
+                toast.classList.add('toast', `toast--${type}`);
+                toast.style.animation=`slideFromRight ease .5s, Remove ease 0.5s ${delay}s forwards`;
+                toast.innerHTML = `
+                                <div class="icon">
+                                    <i class="${icon}"></i>
+                                </div>
+                                <div class="content">
+                                    <h3 class="title">${title}</h3>
+                                    <p class="msg">${message}</p>
+                                </div>
+                                <div class="close">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </div>
+                            `;
+                main.appendChild(toast);
+
+            }
+        }
+
+        function showtoastSuccess () {
+            toast({
+            title: 'Success',
+            message: 'show toast success message',
+            type: 'success',
+            duration: 5000
+        });
+        }
+        function showtoastError () {
+            toast({
+            title: 'Error',
+            message: 'show toast error message',
+            type: 'error',
+            duration: 5000
+        });
+        }
+    </script>
+</body>
+</html>
